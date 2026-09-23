@@ -8,18 +8,21 @@ jobs:
     steps:
       - name: Comprobación del repositorio
         uses: actions/checkout@v4
-
-      - name: Comparar token de desarrollo
+          
+- name: Comparar token de desarrollo
         env:
           SECRET_DEV: ${{ secrets.DEV_TOKEN }}
-          LOCAL_DEV: ${{ vars.LOCAL_DEV_TOKEN }} 
+          LOCAL_DEV: ${{ env.LOCAL_DEV_TOKEN }}
+        shell: powershell
         run: |
-          echo "Comprobación del DEV_TOKEN..."
-          # En Linux bash (ajusta a PowerShell si tu runner corre en Windows):
-          if [ "${{ secrets.DEV_TOKEN }}" = "$LOCAL_DEV_TOKEN" ]; then
-            echo "¡Los tokens COINCIDEN correctamente!"
-            exit 0
-          else
-            echo "Error: Los tokens NO coinciden."
-            exit 1
-          fi
+          Write-Host "Comprobando DEV_TOKEN..."
+          Write-Host "Valor local: $env:LOCAL_DEV_TOKEN"
+          
+          if ("${{ secrets.DEV_TOKEN }}" -eq "$env:LOCAL_DEV_TOKEN") {
+              Write-Host "¡Los tokens COINCIDEN correctamente!"
+              exit 0
+          } else {
+              Write-Host "Error: Los tokens NO coinciden."
+              exit 1
+          }
+          fi         
