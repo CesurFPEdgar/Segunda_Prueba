@@ -12,7 +12,6 @@ jobs:
       - name: Comparar token de desarrollo
         env:
           SECRET_DEV: ${{ secrets.DEV_TOKEN }}
-          LOCAL_DEV: ${{ env.LOCAL_DEV_TOKEN }}
         shell: powershell
         run: |
           Write-Host "Comprobando DEV_TOKEN..."
