@@ -8,8 +8,8 @@ jobs:
     steps:
       - name: Comprobación del repositorio
         uses: actions/checkout@v4
-          
-- name: Comparar token de desarrollo
+
+      - name: Comparar token de desarrollo
         env:
           SECRET_DEV: ${{ secrets.DEV_TOKEN }}
           LOCAL_DEV: ${{ env.LOCAL_DEV_TOKEN }}
@@ -25,4 +25,3 @@ jobs:
               Write-Host "Error: Los tokens NO coinciden."
               exit 1
           }
-          fi         
