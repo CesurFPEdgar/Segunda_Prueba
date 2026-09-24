@@ -10,8 +10,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Comparar token de desarrollo
-        env:
-          SECRET_DEV: ${{ secrets.DEV_TOKEN }}
+
         shell: powershell
         run: |
           Write-Host "Comprobando DEV_TOKEN..."
