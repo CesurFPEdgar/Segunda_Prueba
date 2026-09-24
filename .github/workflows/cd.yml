@@ -1,0 +1,41 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Increment Version in README
+        run: |
+          # Incrementa de AppVersion-0 a AppVersion-1 (o siguiente) añadiendo fecha y hora
+          FECHA=$(date '+%Y-%m-%d %H:%M:%S')
+          sed -i 's/AppVersion-[0-9]*/AppVersion-1 (Desplegado: '"$FECHA"')/g' README.md
+
+      - name: Commit and push version bump
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "cd: incremento de versión en producción"
+
+  validate-prod:
+    needs: bump-version
+    runs-on: self-hosted
+    steps:
+      - name: Validate Local Prod Token
+        run: |
+          echo "Validando contra la variable local PROD_TOKEN..."
+          if [ "$LOCAL_PROD_TOKEN" = "$PROD_TOKEN" ]; then
+            echo "Token de producción válido."
+          else
+            echo "Error: El token de producción no coincide."
+            exit 1
+          fi
