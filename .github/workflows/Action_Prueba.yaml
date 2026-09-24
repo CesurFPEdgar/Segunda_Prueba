@@ -1,4 +1,4 @@
-name: Prueba Runner/Secret
+name: Prueba Runner/Secrets
 
 on:
   push:
